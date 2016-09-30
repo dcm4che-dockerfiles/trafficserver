@@ -16,4 +16,4 @@ RUN set -ex \
  && ./configure --prefix=/opt/ats --with-user=tserver && make && make install \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/src/trafficserver-${TS_VERSION}
 
-CMD ["/opt/ats/bin/trafficserver", "start"]
+CMD ["/opt/ats/bin/traffic_cop", "-o"]
