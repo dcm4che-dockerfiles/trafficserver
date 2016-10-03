@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 ENV TS_VERSION=6.2.0 \
-    ATS_HOME=/opt/ats
+    TS_HOME=/opt/ats
 
 # explicitly set user/group IDs
 RUN groupadd -r tserver --gid=1030 && useradd -r -g tserver --uid=1030 tserver
@@ -14,13 +14,18 @@ RUN set -ex \
  && cd /usr/src \
  && curl -L http://www-eu.apache.org/dist/trafficserver/trafficserver-${TS_VERSION}.tar.bz2 | tar xj \
  && cd trafficserver-${TS_VERSION} \
- && ./configure --prefix=/opt/ats --with-user=tserver && make && make install \
+ && ./configure --prefix=${TS_HOME} --with-user=tserver && make && make install \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/src/trafficserver-${TS_VERSION} \
- && mkdir /docker-entrypoint.d  && mv $ATS_HOME/etc /docker-entrypoint.d
+ && mkdir /docker-entrypoint.d  && mv $TS_HOME/etc /docker-entrypoint.d
 
-ENV PATH $ATS_HOME/bin:$PATH
+# Default configuration: can be overridden at the docker command line
+ENV TS_MAP_TARGET=http://localhost:8080 \
+    TS_MAP_REPLACEMENT=http://dcm4chee-arc:8080 \
+    TS_STORAGE="var/trafficserver 256M"
 
-VOLUME $ATS_HOME/var
+ENV PATH $TS_HOME/bin:$PATH
+
+VOLUME $TS_HOME/var
 
 # Expose the ports we're interested in
 EXPOSE 8080
