@@ -4,8 +4,7 @@ set -e
 
 if [ "$1" = 'traffic_cop' ]; then
     if [ ! -f $TS_HOME/etc/trafficserver/records.config ]; then
-        cp -r /docker-entrypoint.d/etc $TS_HOME
-        chown -R tserver:tserver $TS_HOME/etc
+        cp -rp /docker-entrypoint.d/etc $TS_HOME
         cat >> $TS_HOME/etc/trafficserver/records.config << EOF
 CONFIG proxy.config.hostdb.host_file.path STRING /etc/hosts
 CONFIG proxy.config.http.cache.ignore_client_no_cache INT 0
@@ -23,9 +22,13 @@ url_regex=${TS_MAP_TARGET}/dcm4chee-arc/ui/.* never-cache
 EOF
         sed -i "s%var/trafficserver 256M%${TS_STORAGE}%" $TS_HOME/etc/trafficserver/storage.config
     fi
-    if [ ! -d $TS_HOME/var/log/trafficserver ]; then
-        mkdir -p $TS_HOME/var/trafficserver $TS_HOME/var/log/trafficserver
-        chown -R tserver:tserver $TS_HOME/var
+    if [ ! -f $TS_HOME/var/trafficserver/hostdb.config ]; then
+        mkdir -p $TS_HOME/var/trafficserver
+        chown tserver:tserver $TS_HOME/var/trafficserver
+    fi
+    if [ ! -f $TS_HOME/var/log/trafficserver/manager.log ]; then
+        mkdir -p $TS_HOME/var/log/trafficserver
+        chown tserver:tserver $TS_HOME/var/log/trafficserver
     fi
 fi
 
