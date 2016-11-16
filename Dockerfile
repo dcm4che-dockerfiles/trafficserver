@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV TS_VERSION=6.2.0 \
+ENV TS_VERSION=7.0.0 \
     TS_HOME=/opt/ats
 
 # explicitly set user/group IDs
@@ -14,7 +14,7 @@ RUN set -ex \
  && cd /usr/src \
  && curl -L http://www-eu.apache.org/dist/trafficserver/trafficserver-${TS_VERSION}.tar.bz2 | tar xj \
  && cd trafficserver-${TS_VERSION} \
- && ./configure --prefix=${TS_HOME} --with-user=tserver && make && make install \
+ && ./configure --prefix=${TS_HOME} --with-user=tserver --enable-experimental-plugins --disable-hwloc && make && make install \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/src/trafficserver-${TS_VERSION} \
  && mkdir /docker-entrypoint.d  && mv $TS_HOME/etc /docker-entrypoint.d
 

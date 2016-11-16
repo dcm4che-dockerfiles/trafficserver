@@ -8,17 +8,13 @@ if [ "$1" = 'traffic_cop' ]; then
         cat >> $TS_HOME/etc/trafficserver/records.config << EOF
 CONFIG proxy.config.hostdb.host_file.path STRING /etc/hosts
 CONFIG proxy.config.http.cache.ignore_client_no_cache INT 0
-CONFIG proxy.config.http.cache.required_headers INT 0
+CONFIG proxy.config.http.cache.required_headers INT 1
 CONFIG proxy.config.http_ui_enabled INT 1
 EOF
         cat >> $TS_HOME/etc/trafficserver/remap.config << EOF
 map ${TS_MAP_TARGET}/myCI http://{cache}
-map ${TS_MAP_TARGET} ${TS_MAP_REPLACEMENT}
+map ${TS_MAP_TARGET} ${TS_MAP_REPLACEMENT} @plugin=cachekey.so @pparam=--include-headers=Accept
 reverse_map ${TS_MAP_REPLACEMENT} ${TS_MAP_TARGET}
-EOF
-        cat >> $TS_HOME/etc/trafficserver/cache.config << EOF
-url_regex=${TS_MAP_TARGET}/auth/.* never-cache
-url_regex=${TS_MAP_TARGET}/dcm4chee-arc/ui/.* never-cache
 EOF
         sed -i "s%var/trafficserver 256M%${TS_STORAGE}%" $TS_HOME/etc/trafficserver/storage.config
     fi
