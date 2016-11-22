@@ -21,7 +21,8 @@ RUN set -ex \
 # Default configuration: can be overridden at the docker command line
 ENV TS_MAP_TARGET=http://localhost:8080 \
     TS_MAP_REPLACEMENT=http://dcm4chee-arc:8080 \
-    TS_STORAGE="var/trafficserver 256M"
+    TS_STORAGE="var/trafficserver 256M" \
+    TS_WHEN_TO_REVALIDATE=2
 
 ENV PATH $TS_HOME/bin:$PATH
 

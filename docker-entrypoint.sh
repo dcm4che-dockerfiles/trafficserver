@@ -8,6 +8,7 @@ if [ "$1" = 'traffic_cop' ]; then
         cat >> $TS_HOME/etc/trafficserver/records.config << EOF
 CONFIG proxy.config.hostdb.host_file.path STRING /etc/hosts
 CONFIG proxy.config.http.cache.ignore_client_no_cache INT 0
+CONFIG proxy.config.http.cache.when_to_revalidate INT ${TS_WHEN_TO_REVALIDATE}
 CONFIG proxy.config.http.cache.required_headers INT 1
 CONFIG proxy.config.http_ui_enabled INT 1
 EOF
