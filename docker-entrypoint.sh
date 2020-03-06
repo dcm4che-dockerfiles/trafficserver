@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$1" = 'traffic_cop' ]; then
+if [ "$1" = 'traffic_server' ]; then
     if [ ! -f $TS_HOME/etc/trafficserver/records.config ]; then
         cp -rp /docker-entrypoint.d/etc $TS_HOME
         cat >> $TS_HOME/etc/trafficserver/records.config << EOF
