@@ -1,6 +1,6 @@
 FROM debian:buster
 
-ENV TS_VERSION=8.0.6 \
+ENV TS_VERSION=8.1.0 \
     TS_HOME=/opt/ats
 
 # explicitly set user/group IDs
